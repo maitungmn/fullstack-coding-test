@@ -1,6 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/auth";
-import "firebase/firestore";
+import "firebase/database";
 import firebaseConfig from "./configs";
 
 !firebase.apps.length && firebase.initializeApp(firebaseConfig);
@@ -8,8 +8,7 @@ import firebaseConfig from "./configs";
 export default firebase;
 
 export const auth = firebase.auth();
-export const DB = firebase.firestore();
 
-export const usersCol = DB.collection("Users");
+export const usersCol = (userID: string = "") => firebase.database().ref("Users/" + (userID || ""));
 
 
