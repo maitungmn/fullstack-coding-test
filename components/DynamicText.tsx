@@ -1,10 +1,20 @@
+import React from "react";
 import { Heading } from "@chakra-ui/react";
-import React, { useState } from "react";
 
-const DynamicText = () => {
-  const [value, setValue] = useState("Random Text");
+export interface IRefObject {
+  changeValue: (newValue: string) => void
+}
 
-  const changeValue = (newValue) => {
+const DynamicText = React.forwardRef((props, ref) => {
+  React.useImperativeHandle<unknown, IRefObject>(ref,
+    () => ({
+      changeValue,
+    }),
+  );
+  const [value, setValue] = React.useState<string>("Random Text");
+
+
+  const changeValue = (newValue: string) => {
     setValue(newValue);
   };
 
@@ -13,6 +23,6 @@ const DynamicText = () => {
       {value}
     </Heading>
   );
-};
+});
 
 export default DynamicText;
