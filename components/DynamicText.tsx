@@ -1,3 +1,4 @@
+import { Heading } from "@chakra-ui/react";
 import React, { useState } from "react";
 
 const DynamicText = () => {
@@ -7,7 +8,11 @@ const DynamicText = () => {
     setValue(newValue);
   };
 
-  return <h1>{value}</h1>;
+  return (
+    <Heading as="h1" isTruncated>
+      {value}
+    </Heading>
+  );
 };
 
 export default DynamicText;
