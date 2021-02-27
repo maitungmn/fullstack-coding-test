@@ -3,10 +3,7 @@ import "firebase/auth";
 import "firebase/firestore";
 import firebaseConfig from "./configs";
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-  firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
-}
+!firebase.apps.length && firebase.initializeApp(firebaseConfig);
 
 export default firebase;
 
