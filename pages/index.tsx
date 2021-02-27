@@ -2,7 +2,7 @@ import React from "react";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import DynamicText, { IRefObject } from "../components/DynamicText";
-import { Container, Input } from "@chakra-ui/react";
+import { Box, Container, Input } from "@chakra-ui/react";
 
 const Home = () => {
   const childRef = React.useRef<IRefObject>();
@@ -19,9 +19,12 @@ const Home = () => {
       </Head>
 
       <main className={styles.main}>
-        <DynamicText ref={childRef} />
-        <Input onChange={onChange} />
+        <Box maxW="20rem">
+          <DynamicText ref={childRef} />
+          <Input onChange={onChange} />
+        </Box>
       </main>
+
     </Container>
   );
 };

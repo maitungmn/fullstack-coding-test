@@ -19,7 +19,7 @@ const DynamicText = React.forwardRef((props, ref) => {
   };
 
   return (
-    <Heading as="h1" isTruncated>
+    <Heading as="h1" mb={4}>
       {value}
     </Heading>
   );
