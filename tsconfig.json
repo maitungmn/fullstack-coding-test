@@ -21,6 +21,12 @@
     "paths": {
       "/": [
         "./"
+      ],
+      "@fb/*": [
+        "firebase/*"
+      ],
+      "@context/*": [
+        "context/*"
       ]
     }
   },

@@ -24,7 +24,6 @@ const Home = () => {
           <Input onChange={onChange} />
         </Box>
       </main>
-
     </Container>
   );
 };
