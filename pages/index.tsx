@@ -1,7 +1,7 @@
 import React from "react";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import DynamicText, { IRefObject } from "../components/DynamicText";
+import DynamicText, { IRefObject } from "components/DynamicText";
 import { Box, Container, Input } from "@chakra-ui/react";
 
 const Home = () => {

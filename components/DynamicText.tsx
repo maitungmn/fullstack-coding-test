@@ -5,17 +5,19 @@ export interface IRefObject {
   changeValue: (newValue: string) => void
 }
 
+const defaultText = "Random Text";
+
 const DynamicText = React.forwardRef((props, ref) => {
   React.useImperativeHandle<unknown, IRefObject>(ref,
     () => ({
       changeValue,
     }),
   );
-  const [value, setValue] = React.useState<string>("Random Text");
+  const [value, setValue] = React.useState<string>(defaultText);
 
 
   const changeValue = (newValue: string) => {
-    setValue(newValue);
+    setValue(newValue || defaultText);
   };
 
   return (
