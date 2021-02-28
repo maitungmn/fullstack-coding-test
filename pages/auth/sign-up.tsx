@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import AuthLayout from "../../layouts/auth";
 import EmailPasswordInputs from "../../components/auth/EmailPasswordInputs";
-import { inputFieldRequiredValidator } from "../../utils/inputFieldRequiredValidator";
+import { inputFieldRequiredValidator } from "utils/inputFieldRequiredValidator";
 
 interface FormItems {
   username: string;
