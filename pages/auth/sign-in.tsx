@@ -7,7 +7,7 @@ import { Button, Container, Heading, Input, Stack, Text } from "@chakra-ui/react
 import EmailPasswordInputs from "../../components/auth/EmailPasswordInputs";
 import AuthLayout from "../../layouts/auth";
 import SignUp from "./sign-up";
-import { inputFieldRequiredValidator } from "../../utils/inputFieldRequiredValidator";
+import { inputFieldRequiredValidator } from "utils/inputFieldRequiredValidator";
 
 interface UserData {
   email: string;
