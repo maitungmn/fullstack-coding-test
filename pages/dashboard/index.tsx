@@ -8,6 +8,14 @@ import { Box, SimpleGrid, Image, Text, Button, Container, Flex, Center, Spacer }
 import BlogModal from "../../components/dashboard/BlogModal";
 import CreateBlogModal from "../../components/dashboard/CreateBlogModal";
 
+export interface IBlog {
+  title: string;
+  imageUrl: string;
+  content: string;
+  _createBy: string;
+  _createAt: Date;
+}
+
 export const getServerSideProps = authValidator;
 
 const Dashboard = (
@@ -21,22 +29,18 @@ const Dashboard = (
   const [blogs, setBlogs] = React.useState([
     {
       url: "https://picsum.photos/seed/picsum/200/300",
-      alt: "test" + Math.random(),
       title: "test title" + Math.random(),
       content: "test content " + Math.random(),
     }, {
       url: "https://picsum.photos/seed/picsum/200/300",
-      alt: "test" + Math.random(),
       title: "test title" + Math.random(),
       content: "test content " + Math.random(),
     }, {
       url: "https://picsum.photos/seed/picsum/200/300",
-      alt: "test" + Math.random(),
       title: "test title" + Math.random(),
       content: "test content " + Math.random(),
     }, {
       url: "https://picsum.photos/seed/picsum/200/300",
-      alt: "test" + Math.random(),
       title: "test title" + Math.random(),
       content: "test content " + Math.random(),
     },
@@ -61,7 +65,9 @@ const Dashboard = (
         <Flex justify={"flex-end"}>
           <Button
             marginRight={"2rem"}
-            onClick={() => {setIsOpenCreateBlog(true)}}
+            onClick={() => {
+              setIsOpenCreateBlog(true);
+            }}
           >
             Create Blog
           </Button>
@@ -85,7 +91,7 @@ const Dashboard = (
               padding="2"
               onClick={() => toggleModal(true, i)}
             >
-              <Image objectFit="cover" src={i.url} alt={i.alt} />
+              <Image objectFit="cover" src={i.url} alt="blog image" />
               <Text marginTop={"1rem"}>{i.title}</Text>
             </Flex>
           ))}
@@ -99,6 +105,7 @@ const Dashboard = (
         <CreateBlogModal
           isOpen={isOpenCreateBlog}
           onClose={setIsOpenCreateBlog}
+          user={props.user}
         />
       </Container>
     </Container>
