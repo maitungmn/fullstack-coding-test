@@ -3,6 +3,11 @@ import Router from "next/router";
 
 import { AuthContext } from "@context/AuthProvider";
 import { auth } from "@fb/launcher";
+import { Button, Container, Heading, Input, Stack, Text } from "@chakra-ui/react";
+import EmailPasswordInputs from "../../components/auth/EmailPasswordInputs";
+import AuthLayout from "../../layouts/auth";
+import SignUp from "./sign-up";
+import { inputFieldRequiredValidator } from "../../utils/inputFieldRequiredValidator";
 
 interface UserData {
   email: string;
@@ -12,13 +17,14 @@ interface UserData {
 const Signin = () => {
   const authContext = React.useContext(AuthContext);
 
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [values, setValues] = React.useState({
     email: "",
     password: "",
   } as UserData);
 
-  const handleClick = () => {
-    Router.push("/auth/signup");
+  const handleClickSignup = () => {
+    Router.push("/auth/sign-up");
   };
 
   const handleChange = (event: any) => {
@@ -28,34 +34,60 @@ const Signin = () => {
       [event.target.name]: event.target.value,
     }));
   };
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.KeyboardEvent<HTMLDivElement>) => {
     event.preventDefault();
-    try {
-      const res = await auth
-        .signInWithEmailAndPassword(values.email, values.password);
-      authContext.setUser(res);
-      console.log(res, "res");
-      Router.push("/dashboard");
-    } catch (error) {
-      console.error(error.message);
-      alert(error.message);
+    if (!inputFieldRequiredValidator(values)) {
+      alert("Need to fill all fields!");
+    } else {
+      setIsLoading(true);
+      try {
+        const res = await auth
+          .signInWithEmailAndPassword(values.email, values.password);
+        await authContext.setUser(res);
+        Router.push("/dashboard");
+      } catch (error) {
+        console.error(error.message);
+        alert(error.message);
+        setIsLoading(false);
+      }
     }
   };
 
   return (
-    <div style={{ textAlign: "center" }}>
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="email" value={values.email} placeholder="Enter your Email"
-               onChange={handleChange} /><br /><br />
-        <input type="password" name="password" value={values.password} placeholder="Enter your Password"
-               onChange={handleChange} /><br /><br />
-        <button>Login</button>
-        <p>Not logged in yet?</p>
-        <button onClick={handleClick}>SignUp</button>
-      </form>
+    <div onKeyDown={(e) => {
+      if (e.key === "Enter") {
+        handleSubmit(e);
+      }
+    }}>
+      <Heading marginBottom={"3rem"}>Login Form</Heading>
+
+      <Stack spacing={2} width={"25vw"}>
+        <EmailPasswordInputs handleChange={handleChange} />
+      </Stack>
+
+      <Container
+        centerContent
+        marginTop={"3rem"}
+        p={0}
+        w={"15vw"}
+      >
+        <Button
+          type="submit"
+          marginBottom={"1rem"}
+          width={"100%"}
+          isLoading={isLoading}
+          onClick={handleSubmit}
+        >Login</Button>
+        <Text marginBottom={"1rem"}>Already have account?</Text>
+        <Button
+          width={"100%"}
+          onClick={handleClickSignup}
+        >Register</Button>
+      </Container>
     </div>
   );
 };
+
+Signin.Layout = AuthLayout;
 
 export default Signin;

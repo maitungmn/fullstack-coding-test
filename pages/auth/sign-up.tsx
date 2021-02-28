@@ -15,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import AuthLayout from "../../layouts/auth";
 import EmailPasswordInputs from "../../components/auth/EmailPasswordInputs";
+import { inputFieldRequiredValidator } from "../../utils/inputFieldRequiredValidator";
 
 interface FormItems {
   username: string;
@@ -48,30 +49,38 @@ const SignUp = () => {
 
   const handleSubmit = async (event) => {
     event?.preventDefault();
-    setIsLoading(true);
+    if (!inputFieldRequiredValidator(values)) {
+      alert("Need to fill all fields!");
+    } else {
+      setIsLoading(true);
 
-    try {
-      const userCredential: firebase.auth.UserCredential = await auth
-        .createUserWithEmailAndPassword(values.email, values.password);
+      try {
+        const userCredential: firebase.auth.UserCredential = await auth
+          .createUserWithEmailAndPassword(values.email, values.password);
 
-      authContext.setUser(userCredential);
+        await authContext.setUser(userCredential);
 
-      await usersCol(userCredential.user!.uid).set({
-        email: values.email,
-        username: values.username,
-        phone: values.phone,
-      });
+        await usersCol(userCredential.user!.uid).set({
+          email: values.email,
+          username: values.username,
+          phone: values.phone,
+        });
 
-      Router.push("/dashboard");
-    } catch (error) {
-      console.log(error.message);
-      alert(error.message);
+        Router.push("/dashboard");
+      } catch (error) {
+        console.log(error.message);
+        alert(error.message);
+        setIsLoading(false);
+      }
     }
-    setIsLoading(false);
   };
 
   return (
-    <>
+    <div onKeyDown={(e) => {
+      if (e.key === "Enter") {
+        handleSubmit(e);
+      }
+    }}>
       <Heading marginBottom={"3rem"}>Sign-up Form</Heading>
 
       <Stack spacing={4} width={"25vw"}>
@@ -104,7 +113,7 @@ const SignUp = () => {
           onClick={handleClickLogin}
         >Login</Button>
       </Container>
-    </>
+    </div>
   );
 };
 

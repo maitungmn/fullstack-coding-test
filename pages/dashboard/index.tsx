@@ -1,47 +1,27 @@
 import React from "react";
-import nookies from "nookies";
 import { useRouter } from "next/router";
 
-import { InferGetServerSidePropsType, GetServerSidePropsContext } from "next";
-import { firebaseAdmin } from "@fb/admin";
+import { InferGetServerSidePropsType } from "next";
 import { auth } from "@fb/launcher";
+import { authValidator } from "utils/authValidator";
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  try {
-    const cookies = nookies.get(ctx);
-    const token = await firebaseAdmin.auth().verifyIdToken(cookies.token);
-    const { uid, email } = token;
-
-    return {
-      props: { message: `Your email is ${email} and your UID is ${uid}.` },
-    };
-  } catch (err) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/auth/sign-in",
-      },
-      props: {} as never,
-    };
-  }
-};
+export const getServerSideProps = authValidator;
 
 function Dashboard(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
   const router = useRouter();
 
+  const signOut = async () => {
+    await auth.signOut();
+    router.push("/auth/sign-in");
+  }
+
   return (
     <div>
       <p>{props.message!}</p>
       <button
-        onClick={async () => {
-          await auth
-            .signOut()
-            .then(() => {
-              router.push("/");
-            });
-        }}
+        onClick={signOut}
       >
         Sign out
       </button>
