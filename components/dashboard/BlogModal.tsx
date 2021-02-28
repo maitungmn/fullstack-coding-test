@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal } from "@chakra-ui/modal";
 import {
+  Flex,
   Image,
   ModalBody,
   ModalCloseButton,
@@ -21,8 +22,14 @@ const BlogModal = (props) => {
           <ModalHeader>{openModalObj?.title || ""}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Image objectFit="cover" src={openModalObj?.url || ""} alt={openModalObj?.alt || ""} />
-            <Text>{openModalObj?.content || ""}</Text>
+            <Flex direction="column">
+              <Image
+                src={openModalObj?.imageUrl || ""} alt={openModalObj?.alt || ""}
+                objectFit="cover"
+                marginBottom="1rem"
+              />
+              <Text dangerouslySetInnerHTML={{ __html: openModalObj?.content || "" }} />
+            </Flex>
           </ModalBody>
         </ModalContent>
       </Modal>

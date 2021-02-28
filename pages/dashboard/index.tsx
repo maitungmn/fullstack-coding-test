@@ -2,11 +2,13 @@ import React from "react";
 import { useRouter } from "next/router";
 
 import { InferGetServerSidePropsType } from "next";
-import { auth } from "@fb/launcher";
+import { auth, blogsCol } from "@fb/launcher";
 import { authValidator } from "utils/authValidator";
-import { Box, SimpleGrid, Image, Text, Button, Container, Flex, Center, Spacer } from "@chakra-ui/react";
+import { SimpleGrid, Image, Text, Button, Container, Flex, Center, Spacer } from "@chakra-ui/react";
 import BlogModal from "../../components/dashboard/BlogModal";
 import CreateBlogModal from "../../components/dashboard/CreateBlogModal";
+import { useObserver } from "hooks/blogs/useObserver";
+import { useFetchOnce } from "hooks/blogs/useFetchOnce";
 
 export interface IBlog {
   title: string;
@@ -14,6 +16,10 @@ export interface IBlog {
   content: string;
   _createBy: string;
   _createAt: Date;
+}
+
+export interface IBlogState extends IBlog {
+  id: string;
 }
 
 export const getServerSideProps = authValidator;
@@ -26,25 +32,10 @@ const Dashboard = (
   const [openModalObj, setOpenModalObj] = React.useState(null);
   const [isOpenCreateBlog, setIsOpenCreateBlog] = React.useState(false);
 
-  const [blogs, setBlogs] = React.useState([
-    {
-      url: "https://picsum.photos/seed/picsum/200/300",
-      title: "test title" + Math.random(),
-      content: "test content " + Math.random(),
-    }, {
-      url: "https://picsum.photos/seed/picsum/200/300",
-      title: "test title" + Math.random(),
-      content: "test content " + Math.random(),
-    }, {
-      url: "https://picsum.photos/seed/picsum/200/300",
-      title: "test title" + Math.random(),
-      content: "test content " + Math.random(),
-    }, {
-      url: "https://picsum.photos/seed/picsum/200/300",
-      title: "test title" + Math.random(),
-      content: "test content " + Math.random(),
-    },
-  ]);
+  const [blogs, setBlogs] = React.useState<IBlogState[]>([]);
+
+  useFetchOnce(setBlogs);
+  useObserver(setBlogs);
 
   const signOut = async () => {
     await auth.signOut();
@@ -84,14 +75,16 @@ const Dashboard = (
           {blogs.map((i, index) => (
             <Flex
               key={index}
+              direction="column"
               wrap={"wrap"}
               justify={"center"}
+              textAlign="center"
               bg="#E2E8F0"
               borderRadius="3%"
               padding="2"
               onClick={() => toggleModal(true, i)}
             >
-              <Image objectFit="cover" src={i.url} alt="blog image" />
+              <Image objectFit="cover" src={i.imageUrl} alt="blog image" />
               <Text marginTop={"1rem"}>{i.title}</Text>
             </Flex>
           ))}
