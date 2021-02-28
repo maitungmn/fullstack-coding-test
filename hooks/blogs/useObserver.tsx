@@ -1,36 +1,29 @@
 import React from "react";
 import { blogsCol } from "@fb/launcher";
-import { IBlogState } from "../../pages/dashboard";
+import { IBlogState } from "pages/dashboard";
 
-export const useObserver = (setBlogs: React.Dispatch<React.SetStateAction<IBlogState[]>>) => {
-  const [observer, setObserver] = React.useState<() => void>(null);
+export const useObserver = () => {
+
+  const [blogs, setBlogs] = React.useState<IBlogState[]>([]);
 
   React.useEffect(() => {
-    (() => {
-      let firstTime: number = 0;
-      const observer = blogsCol.onSnapshot(
-        querySnapshot => {
-          ++firstTime;
-          querySnapshot.docChanges().forEach(change => {
-            if (firstTime != 1) {
-              console.log("change.doc.id", change.doc.id);
-              console.log("change.type", change.type);
-              console.log("change.doc.data()", change.doc.data());
-              // const cateObj = {
-              //   id: change.doc.id,
-              //   type: change.type,
-              //   ...change.doc.data()
-              // };
-              // setBlogs()
-              // commit("setCateModifiedOnSnapshot", cateObj);
-            }
-          });
-        },
-        err => {
-          console.error(`Encountered error: ${err}`);
-        },
-      );
-      setObserver(observer);
-    })();
-  }, [observer]);
+    const observer = blogsCol.onSnapshot(
+      querySnapshot => {
+        const blogs = querySnapshot.docs.map(i => (
+          {
+            ...i.data(),
+            id: i.id,
+          }
+        ));
+        setBlogs(blogs as IBlogState[]);
+      },
+      err => {
+        console.error(`Encountered error: ${err}`);
+      },
+    );
+
+    return observer;
+  }, []);
+
+  return [blogs];
 };

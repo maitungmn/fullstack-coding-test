@@ -22,7 +22,7 @@ import { blogImageStorage, blogsCol } from "@fb/launcher";
 import { IBlog } from "pages/dashboard";
 
 const imgTypes = ["image/png", "image/jpeg"];
-const maxImgSize = 500000;
+const maxImgSize = 5000000;
 
 const CreateBlogModal = (props) => {
   const { isOpen, onClose, user } = props;
@@ -87,7 +87,7 @@ const CreateBlogModal = (props) => {
     <>
       <Modal isOpen={isOpen} onClose={() => onClose(false)}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent maxW="40vw">
           <ModalHeader>Create Blog</ModalHeader>
           <ModalCloseButton />
           {isSuccess && (

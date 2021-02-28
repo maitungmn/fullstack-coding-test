@@ -18,7 +18,7 @@ const BlogModal = (props) => {
     <>
       <Modal isOpen={!!openModalObj} onClose={() => onClose(false)}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent maxW="40vw">
           <ModalHeader>{openModalObj?.title || ""}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>

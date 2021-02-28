@@ -8,7 +8,6 @@ import { SimpleGrid, Image, Text, Button, Container, Flex, Center, Spacer } from
 import BlogModal from "../../components/dashboard/BlogModal";
 import CreateBlogModal from "../../components/dashboard/CreateBlogModal";
 import { useObserver } from "hooks/blogs/useObserver";
-import { useFetchOnce } from "hooks/blogs/useFetchOnce";
 
 export interface IBlog {
   title: string;
@@ -31,11 +30,7 @@ const Dashboard = (
 
   const [openModalObj, setOpenModalObj] = React.useState(null);
   const [isOpenCreateBlog, setIsOpenCreateBlog] = React.useState(false);
-
-  const [blogs, setBlogs] = React.useState<IBlogState[]>([]);
-
-  useFetchOnce(setBlogs);
-  useObserver(setBlogs);
+  const [blogs] = useObserver();
 
   const signOut = async () => {
     await auth.signOut();
@@ -48,7 +43,7 @@ const Dashboard = (
 
   return (
     <Container maxW={"80vw"}>
-      <Flex m={[0, 3]}>
+      <Flex m={[0, 7]}>
         <Center w="200px">
           <Text>Welcome {props.user.infos.username || ""}!</Text>
         </Center>
@@ -84,7 +79,11 @@ const Dashboard = (
               padding="2"
               onClick={() => toggleModal(true, i)}
             >
-              <Image objectFit="cover" src={i.imageUrl} alt="blog image" />
+              <Image
+                src={i.imageUrl} alt="blog image"
+                objectFit="cover"
+                maxH="260px"
+              />
               <Text marginTop={"1rem"}>{i.title}</Text>
             </Flex>
           ))}
