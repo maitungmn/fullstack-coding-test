@@ -3,7 +3,7 @@ import Router from "next/router";
 
 import { AuthContext } from "@context/AuthProvider";
 import { auth } from "@fb/launcher";
-import { Button, Container, Heading, Input, Stack, Text } from "@chakra-ui/react";
+import { Button, Container, Heading, Stack, Text } from "@chakra-ui/react";
 import EmailPasswordInputs from "../../components/auth/EmailPasswordInputs";
 import AuthLayout from "../../layouts/auth";
 import { inputFieldRequiredValidator } from "utils/inputFieldRequiredValidator";

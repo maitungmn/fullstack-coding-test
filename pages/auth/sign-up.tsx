@@ -8,8 +8,6 @@ import {
   Container,
   Heading,
   Input,
-  InputGroup,
-  InputRightElement,
   Stack,
   Text,
 } from "@chakra-ui/react";
