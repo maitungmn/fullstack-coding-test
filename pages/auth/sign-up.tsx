@@ -14,6 +14,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import AuthLayout from "../../layouts/auth";
+import EmailPasswordInputs from "../../components/auth/EmailPasswordInputs";
 
 interface FormItems {
   username: string;
@@ -25,7 +26,6 @@ interface FormItems {
 const SignUp = () => {
   const authContext = React.useContext(AuthContext);
 
-  const [show, setShow] = React.useState<boolean>(false);
   const [values, setValues] = React.useState({
     username: "",
     email: "",
@@ -82,23 +82,7 @@ const SignUp = () => {
           name="phone"
           onChange={handleChange}
         />
-        <Input placeholder="Email" name="email" type="email" onChange={handleChange} />
-        <InputGroup size="md">
-          <Input
-            pr="4.5rem"
-            type={show ? "text" : "password"}
-            placeholder="Enter password"
-            name="password"
-            onChange={handleChange}
-          />
-          <InputRightElement width="4.5rem">
-            <Button h="1.75rem" size="sm" onClick={() => {
-              setShow(!show);
-            }}>
-              {show ? "Hide" : "Show"}
-            </Button>
-          </InputRightElement>
-        </InputGroup>
+        <EmailPasswordInputs handleChange={handleChange} />
       </Stack>
 
       <Container
