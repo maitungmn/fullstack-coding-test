@@ -2,11 +2,11 @@ import React from "react";
 import { useRouter } from "next/router";
 
 import { InferGetServerSidePropsType } from "next";
-import { auth, blogsCol } from "@fb/launcher";
+import { auth } from "@fb/launcher";
 import { authValidator } from "utils/authValidator";
 import { SimpleGrid, Image, Text, Button, Container, Flex, Center, Spacer } from "@chakra-ui/react";
-import BlogModal from "../../components/dashboard/BlogModal";
-import CreateBlogModal from "../../components/dashboard/CreateBlogModal";
+import BlogModal from "../../components/blog/BlogModal";
+import CreateBlogModal from "../../components/blog/CreateBlogModal";
 import { useObserver } from "hooks/blogs/useObserver";
 
 export interface IBlog {
@@ -23,7 +23,7 @@ export interface IBlogState extends IBlog {
 
 export const getServerSideProps = authValidator;
 
-const Dashboard = (
+const Blog = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) => {
   const router = useRouter();
@@ -104,4 +104,4 @@ const Dashboard = (
   );
 };
 
-export default Dashboard;
+export default Blog;

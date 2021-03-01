@@ -1,6 +1,6 @@
 import React from "react";
 import { blogsCol } from "@fb/launcher";
-import { IBlogState } from "pages/dashboard";
+import { IBlogState } from "pages/blog";
 
 export const useObserver = () => {
 

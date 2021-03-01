@@ -64,7 +64,7 @@ const SignUp = () => {
           phone: values.phone,
         });
 
-        Router.push("/dashboard");
+        Router.push("/blog");
       } catch (error) {
         console.log(error.message);
         alert(error.message);

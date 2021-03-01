@@ -19,7 +19,7 @@ import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
 import { v4 as uuidv4 } from "uuid";
 import { blogImageStorage, blogsCol } from "@fb/launcher";
-import { IBlog } from "pages/dashboard";
+import { IBlog } from "pages/blog";
 
 const imgTypes = ["image/png", "image/jpeg"];
 const maxImgSize = 5000000;

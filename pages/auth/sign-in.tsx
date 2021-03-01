@@ -43,7 +43,7 @@ const Signin = () => {
         const res = await auth
           .signInWithEmailAndPassword(values.email, values.password);
         await authContext.setUser(res);
-        Router.push("/dashboard");
+        Router.push("/blog");
       } catch (error) {
         console.error(error.message);
         alert(error.message);
