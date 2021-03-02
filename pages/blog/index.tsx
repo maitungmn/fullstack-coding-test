@@ -9,6 +9,7 @@ import BlogModal from "../../components/blog/BlogModal";
 import CreateBlogModal from "../../components/blog/CreateBlogModal";
 import { useObserver } from "hooks/blogs/useObserver";
 import { useCatchAlert } from "hooks/blogs/useCatchAlert";
+import { useToken } from "hooks/useToken";
 
 export interface IBlog {
   title: string;
@@ -32,6 +33,7 @@ const Blog = (
   const [openModalObj, setOpenModalObj] = React.useState(null);
   const [isOpenCreateBlog, setIsOpenCreateBlog] = React.useState(false);
   const [blogs] = useObserver();
+  const [token] = useToken()
   useCatchAlert()
 
   const signOut = async () => {
@@ -100,6 +102,7 @@ const Blog = (
           isOpen={isOpenCreateBlog}
           onClose={setIsOpenCreateBlog}
           user={props.user}
+          token={token}
         />
       </Container>
     </Container>

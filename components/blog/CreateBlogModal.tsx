@@ -1,5 +1,6 @@
 import React from "react";
 import { Modal } from "@chakra-ui/modal";
+import { v4 as uuidv4 } from "uuid";
 import {
   Alert,
   AlertIcon,
@@ -14,12 +15,12 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
-
 import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
-import { v4 as uuidv4 } from "uuid";
-import { blogImageStorage, blogsCol } from "@fb/launcher";
-import { IBlog } from "pages/blog";
+
+import { blogImageStorage } from "@fb/launcher";
+import { ENDPOINT_BLOG } from "constants/index";
+import { buildClient } from "api/build-client";
 
 const imgTypes = ["image/png", "image/jpeg"];
 const maxImgSize = 5000000;
@@ -67,13 +68,12 @@ const CreateBlogModal = (props) => {
       const imgSnapshot = await blogImageStorage.child(`${user?.uid || ""}_${uuidv4()}.jpg`).put(image);
       const imageUrl = await imgSnapshot.ref.getDownloadURL();
 
-      await blogsCol.doc().set({
+      const axiosInstance = buildClient({ Authorization: `Bearer ${props.token}` })
+      await axiosInstance.post(ENDPOINT_BLOG, {
         title,
         content,
         imageUrl,
-        _createBy: user.infos.username || "",
-        _createAt: new Date(),
-      } as IBlog);
+      })
       setIsSuccess(true);
     } catch (e) {
       console.error(e);

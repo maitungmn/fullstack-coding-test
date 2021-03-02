@@ -1,8 +1,6 @@
-import axios from "axios"
+import axios from 'axios';
 
-export const buildClient = (headers) => {
-  return axios.create({
-    baseURL: process.env.NEXT_PUBLIC_LAMBDA_ENDPOINT,
-    headers
-  })
-}
+export const buildClient = (headers) => axios.create({
+  baseURL: process.env.NEXT_PUBLIC_LAMBDA_ENDPOINT,
+  headers,
+})
