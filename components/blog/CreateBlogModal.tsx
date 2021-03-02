@@ -21,18 +21,21 @@ import "suneditor/dist/css/suneditor.min.css";
 import { blogImageStorage } from "@fb/launcher";
 import { ENDPOINT_BLOG } from "constants/index";
 import { buildClient } from "api/build-client";
+import { useCheckCreateUpdate } from "hooks/blogs/useCheckCreateUpdate";
 
 const imgTypes = ["image/png", "image/jpeg"];
 const maxImgSize = 5000000;
 
 const CreateBlogModal = (props) => {
-  const { isOpen, onClose, user } = props;
+  const { isOpen, onClose, user, updateContents } = props;
 
   const [title, setTitle] = React.useState<string>("");
   const [image, setImage] = React.useState<File>(null);
   const [content, setContent] = React.useState<string>("");
   const [isSaving, setIsSaving] = React.useState<boolean>(false);
   const [isSuccess, setIsSuccess] = React.useState<boolean>(false);
+
+  const [isCreate] = useCheckCreateUpdate(updateContents)
 
   React.useEffect(() => {
     setIsSuccess(false);
@@ -83,12 +86,38 @@ const CreateBlogModal = (props) => {
     setIsSaving(false);
   };
 
+  const onUpdateBlog = async () => {
+    if (!title || !content) {
+      alert("Should provide all fields!");
+    }
+    setIsSaving(true);
+
+    if (!updateContents?.id) {
+      onClose(false)
+      alert("Something went wrong!")
+    }
+    try {
+      const axiosInstance = buildClient({ Authorization: `Bearer ${props.token}` })
+      await axiosInstance.put(`${ENDPOINT_BLOG}/${updateContents?.id}`, {
+        title,
+        imageURL: updateContents?.imageURL || "",
+        content,
+      })
+      setIsSuccess(true);
+    } catch (e) {
+      console.error(e);
+      alert(e);
+    }
+
+    setIsSaving(false);
+  };
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={() => onClose(false)}>
         <ModalOverlay />
         <ModalContent maxW="40vw">
-          <ModalHeader>Create Blog</ModalHeader>
+          <ModalHeader>{isCreate ? "Create Blog" : `Update Blog ${updateContents.title || ""}`}</ModalHeader>
           <ModalCloseButton />
           {isSuccess && (
             <Alert status="success">
@@ -103,21 +132,37 @@ const CreateBlogModal = (props) => {
                 <Input
                   id="blog-title"
                   type="text"
+                  defaultValue={updateContents?.title || ""}
                   onChange={onTitleChange} />
               </Box>
 
               <Box marginBottom="1rem">
-                <label htmlFor="blog-image">Select an image:</label>
-                <Input
-                  id="blog-image"
-                  type="file"
-                  accept={imgTypes.join(", ")}
-                  onChange={onImageChange} />
+                {isCreate ? (
+                  <>
+                    <label htmlFor="blog-image">Select an image:</label>
+                    <Input
+                      id="blog-image"
+                      type="file"
+                      accept={imgTypes.join(", ")}
+                      onChange={onImageChange} />
+                  </>
+                ) : (
+                    <Input
+                      type="text"
+                      disabled
+                      defaultValue={updateContents?.imageUrl || ""}
+                    />
+                  )}
+
               </Box>
 
               <Box>
                 <label>Input content:</label>
-                <SunEditor height="300" onChange={handleChange} />
+                <SunEditor
+                  defaultValue={isCreate && updateContents?.content ? "" : updateContents?.content}
+                  height="300"
+                  onChange={handleChange}
+                />
               </Box>
             </Flex>
           </ModalBody>
@@ -131,12 +176,19 @@ const CreateBlogModal = (props) => {
             >
               Close
             </Button>
-            {!isSuccess && (
+            {!isSuccess && isCreate && (
               <Button
                 colorScheme="blue"
                 isLoading={isSaving}
                 onClick={onSubmitBlog}
               >Create</Button>
+            )}
+            {!isSuccess && !isCreate && (
+              <Button
+                colorScheme="blue"
+                isLoading={isSaving}
+                onClick={onUpdateBlog}
+              >Update</Button>
             )}
           </ModalFooter>
         </ModalContent>

@@ -23,7 +23,8 @@ const Dashboard = (
   const [openModalObj, setOpenModalObj] = React.useState(null);
   const [isOpenCreateBlog, setIsOpenCreateBlog] = React.useState(false);
   const [isDeleting, setIsDeleting] = React.useState(false);
-  const [isUpdating, setIsUpdating] = React.useState(false);
+  const [isOpenUpdateBlog, setIsOpenUpdateBlog] = React.useState(false);
+  const [updateBlogContent, setUpdateBlogContent] = React.useState(null);
 
   useCheckAdmin(props.user?.infos?.role)
   const [blogs] = useObserver();
@@ -50,6 +51,12 @@ const Dashboard = (
     } finally {
       setIsDeleting(false)
     }
+  }
+
+  const onUpdate = (event, updateContent) => {
+    event.stopPropagation()
+    setIsOpenUpdateBlog(true)
+    setUpdateBlogContent(updateContent)
   }
 
   return (
@@ -101,11 +108,14 @@ const Dashboard = (
                 <Button
                   marginRight="1rem"
                   colorScheme="red"
+                  isLoading={isDeleting}
                   onClick={e => onDelete(e, i.id)}
                 >Delete</Button>
                 <Button
                   marginLeft="auto"
                   colorScheme="blue"
+                  onClick={(e) => onUpdate(e, i)}
+                  isLoading={isDeleting}
                 >Update</Button>
               </Flex>
             </Flex>
@@ -122,6 +132,13 @@ const Dashboard = (
           onClose={setIsOpenCreateBlog}
           user={props.user}
           token={token}
+        />
+        <CreateBlogModal
+          isOpen={isOpenUpdateBlog}
+          onClose={setIsOpenUpdateBlog}
+          user={props.user}
+          token={token}
+          updateContents={updateBlogContent}
         />
       </Container>
     </Container>
