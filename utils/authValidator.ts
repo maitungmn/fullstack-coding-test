@@ -4,6 +4,7 @@ import { firebaseAdmin } from "@fb/admin";
 import { usersColGetOnce } from "@fb/launcher";
 
 interface userInfos  {
+  role?: string;
   email: string;
   phone: string;
   username: string;

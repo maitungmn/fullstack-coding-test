@@ -1,0 +1,1 @@
+export const NON_ADMIN = "non-admin"

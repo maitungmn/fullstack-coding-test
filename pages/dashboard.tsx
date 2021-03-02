@@ -1,38 +1,27 @@
 import React from "react";
 import { useRouter } from "next/router";
-
 import { InferGetServerSidePropsType } from "next";
+import { SimpleGrid, Image, Text, Button, Container, Flex, Center, Spacer } from "@chakra-ui/react";
+
 import { auth } from "@fb/launcher";
 import { authValidator } from "utils/authValidator";
-import { SimpleGrid, Image, Text, Button, Container, Flex, Center, Spacer } from "@chakra-ui/react";
-import BlogModal from "../../components/blog/BlogModal";
-import CreateBlogModal from "../../components/blog/CreateBlogModal";
 import { useObserver } from "hooks/blogs/useObserver";
-import { useCatchAlert } from "hooks/blogs/useCatchAlert";
-
-export interface IBlog {
-  title: string;
-  imageUrl: string;
-  content: string;
-  _createBy: string;
-  _createAt: Date;
-}
-
-export interface IBlogState extends IBlog {
-  id: string;
-}
+import BlogModal from "components/blog/BlogModal";
+import CreateBlogModal from "components/blog/CreateBlogModal";
+import { useCheckAdmin } from "hooks/dashboard/useCheckAdmin";
 
 export const getServerSideProps = authValidator;
 
-const Blog = (
+const Dashboard = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) => {
   const router = useRouter();
 
   const [openModalObj, setOpenModalObj] = React.useState(null);
   const [isOpenCreateBlog, setIsOpenCreateBlog] = React.useState(false);
+  
+  useCheckAdmin(props.user?.infos?.role)
   const [blogs] = useObserver();
-  useCatchAlert()
 
   const signOut = async () => {
     await auth.signOut();
@@ -106,4 +95,4 @@ const Blog = (
   );
 };
 
-export default Blog;
+export default Dashboard;
